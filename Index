@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Confirmación de Asistencia – Miranda Margarita</title>
+    <style>
+      body {
+        font-family: "Times New Roman", serif;
+        background-color: #f9e6ee;
+        color: #5b4b4b;
+        padding: 30px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 30px;
+        color: #a2627a;
+        margin-bottom: 10px;
+      }
+
+      .card {
+        background: white;
+        width: 90%;
+        max-width: 420px;
+        margin: auto;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+        border: 2px solid #f3c8d8;
+      }
+
+      input, select {
+        width: 90%;
+        padding: 12px;
+        margin-top: 12px;
+        border-radius: 10px;
+        border: 1px solid #d9b1c2;
+        font-size: 16px;
+      }
+
+      button {
+        background-color: #a2627a;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        font-size: 18px;
+        border-radius: 10px;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background-color: #8b4f67;
+      }
+
+      .mensaje {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #7a4e5c;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <h1>Confirmación de Asistencia</h1>
+    <p>XV Años de <strong>Miranda Margarita</strong></p>
+
+    <div class="card">
+      <input id="nombre" type="text" placeholder="Nombre y Apellido" required />
+
+      <input id="pases" type="number" placeholder="Número de personas" min="1" required />
+
+      <select id="asistencia" required>
+        <option value="">¿Asistirás?</option>
+        <option value="Sí">Sí asistiré</option>
+        <option value="No">No asistiré</option>
+      </select>
+
+      <button onclick="enviar()">Confirmar asistencia</button>
+      <div class="mensaje" id="msj"></div>
+    </div>
+
+    <script>
+      function enviar() {
+        const nombre = document.getElementById("nombre").value.trim();
+        const pases = document.getElementById("pases").value.trim();
+        const asistencia = document.getElementById("asistencia").value;
+
+        if (nombre === "" || pases === "" || asistencia === "") {
+          document.getElementById("msj").innerHTML = "Por favor llena todos los campos.";
+          return;
+        }
+
+        fetch("https://script.google.com/macros/s/AKfycbyLTMpb0JJfbvBAdPg-pHV6W23Hac6gas0VdouucFLCiksaGVo2cFwlPIeF3nc-74F1GA/exec", {
+          method: "POST",
+          body: JSON.stringify({ nombre, pases, asistencia })
+        })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("msj").innerHTML = "¡Gracias! Tu respuesta ha sido registrada.";
+          document.getElementById("nombre").value = "";
+          document.getElementById("pases").value = "";
+          document.getElementById("asistencia").value = "";
+        })
+        .catch(err => {
+          document.getElementById("msj").innerHTML = "Ocurrió un error. Intenta de nuevo.";
+        });
+      }
+    </script>
+
+  </body>
+</html>
